@@ -1,27 +1,26 @@
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom';
+import { Home, Heart, Music } from 'lucide-react'; // Ícones bonitos
 
-import "./menu.css"
+export function Menu() {
+  return (
+    <nav className="flex flex-col gap-4">
+      <Link to="/" className="flex items-center gap-3 text-gray-700 hover:text-green-600 transition font-medium">
+        <Home size={20} />
+        Início
+      </Link>
+      
+      <Link to="/" className="flex items-center gap-3 text-gray-700 hover:text-green-600 transition font-medium">
+        <Music size={20} />
+        Minha Biblioteca
+      </Link>
 
-const Menu = () => {
-
-    const cssMenu = "text-sm font-medium text-slate-600 transition-colors hover:text-indigo-600 mr-2"
-
-    return(
-
-        <div>
-
-            <nav className="md:flex items-center gap-8">
-                <Link to="/" className={cssMenu}>Home</Link>
-                <Link to="/projects" className={cssMenu}>Projetos</Link>
-                <Link to="/tasks" className={cssMenu}>Tarefas</Link>
-                <Link to="#" className={cssMenu}>Relatórios</Link>
-                <Link to="#" className={cssMenu}>Perfil</Link>
-            </nav>
-
-        </div>
-
-    )
-
+      <div className="mt-4">
+        <h3 className="text-xs font-bold text-gray-400 uppercase mb-2">Sua Coleção</h3>
+        <Link to="#" className="flex items-center gap-3 text-gray-700 hover:text-green-600 transition font-medium">
+          <Heart size={20} />
+          Músicas Curtidas
+        </Link>
+      </div>
+    </nav>
+  );
 }
-
-export default Menu
