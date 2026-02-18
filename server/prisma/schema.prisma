@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// O antigo "Project" agora é Playlist
+model Playlist {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?  // Descrição opcional da playlist
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  
+  // Relacionamento: Uma playlist tem várias músicas
+  songs       Song[]
+
+  @@map("tb_playlists")
+}
+
+// A antiga "Task" agora é Song (Música)
+model Song {
+  id          Int      @id @default(autoincrement())
+  title       String   // Título da música
+  artist      String   // Nome do artista
+  album       String?  // Nome do álbum (opcional)
+  url         String   // O link do arquivo MP3 (ESSENCIAL)
+  cover       String?  // Link da imagem da capa (Bônus)
+  duration    Int?     // Duração em segundos (opcional)
+
+  // Relacionamento com a Playlist
+  playlist_id Int
+  playlist    Playlist @relation(fields: [playlist_id], references: [id], onDelete: Cascade)
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("tb_songs")
+}
