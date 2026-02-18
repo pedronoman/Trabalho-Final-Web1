@@ -1,3 +1,1 @@
-# Ignore Node.js dependencies
-node_modules/
-bootstrap-5.3.8-examples/
+node_modules
