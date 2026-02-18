@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import api, { Musica } from '../services/api'; 
+import { api, type Musica } from '../services/api';
 
 export function Library() {
     // 1. Estados

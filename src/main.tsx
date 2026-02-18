@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css' // Importante para o Tailwind funcionar
+import './style.css'
 import { Library } from './pages/Library'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

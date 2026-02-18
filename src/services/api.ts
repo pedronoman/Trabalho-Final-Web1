@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-// Cria a instância
-const api = axios.create({
+// 1. Exportação Nomeada da API (Adicionamos o 'export' aqui)
+export const api = axios.create({
     baseURL: 'http://localhost:5000', 
 });
 
-// INTERFACES (Tipos)
+// 2. Interfaces
 export interface Musica {
     id: number;
     title: string;
@@ -22,6 +22,3 @@ export interface Playlist {
     description?: string;
     songs?: Musica[];
 }
-
-// CORREÇÃO: Usar "export default" para o axios funcionar nas páginas
-export default api;

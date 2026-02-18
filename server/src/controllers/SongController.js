@@ -4,20 +4,27 @@ export class SongController {
   
   // GET ALL: Listar todas as músicas do sistema
   async getAll(request, response) {
-    const songs = await prisma.song.findMany({
-      include: {
-        playlist: true, // Mostra a qual playlist pertence
-      },
-    });
-    return response.json(songs);
+    try {
+      const songs = await prisma.song.findMany({
+        include: {
+          playlist: true, 
+        },
+      });
+      return response.json(songs);
+    } catch (error) {
+      // ISTO VAI MOSTRAR O ERRO REAL NO TERMINAL DO SERVIDOR
+      console.error("❌ ERRO AO BUSCAR MÚSICAS:", error);
+      return response.status(500).json({ 
+        message: "Erro interno ao buscar músicas.", 
+        details: error.message 
+      });
+    }
   }
 
   // CREATE: Adicionar música
   async create(request, response) {
-    // Atenção aos campos novos que definimos no Schema!
     const { title, artist, url, cover, playlist_id } = request.body;
 
-    // Validação básica
     if (!title || !url || !playlist_id) {
         return response.status(400).json({ 
             message: "Título, URL e ID da Playlist são obrigatórios." 
@@ -25,15 +32,18 @@ export class SongController {
     }
 
     try {
+      // Verifica se a playlist existe antes de conectar
+      // (Opcional, mas evita erros se o ID for inválido)
+      
       const song = await prisma.song.create({
         data: {
           title,
-          artist: artist || "Desconhecido", // Valor padrão se não vier
+          artist: artist || "Desconhecido",
           url,
           cover,
           playlist: {
             connect: {
-              id: parseInt(playlist_id), // Conecta à tabela Playlist
+              id: parseInt(playlist_id),
             },
           },
         },
@@ -41,44 +51,41 @@ export class SongController {
 
       return response.status(201).json(song);
     } catch (error) {
-      console.error(error);
+      console.error("❌ ERRO AO CRIAR MÚSICA:", error);
       return response.status(400).json({
         message: "Erro ao criar música.",
-        error,
+        error: error.message,
       });
     }
   }
 
-  // UPDATE: Editar música
+  // UPDATE
   async update(request, response) {
     const { id, title, artist, url } = request.body;
 
     try {
       const song = await prisma.song.update({
         where: { id: parseInt(id) },
-        data: {
-          title,
-          artist,
-          url
-        },
+        data: { title, artist, url },
       });
       return response.json(song);
     } catch (error) {
+      console.error(error);
       response.status(400).json({ message: "Erro ao atualizar.", error });
     }
   }
 
-  // DELETE: Remover música
+  // DELETE
   async delete(request, response) {
-    const { id } = request.body; // ou params
+    const { id } = request.body; 
 
     try {
       await prisma.song.delete({
         where: { id: parseInt(id) },
       });
-
       return response.json({ message: "Música removida." });
     } catch (error) {
+      console.error(error);
       response.status(400).json({ message: "Erro ao deletar.", error });
     }
   }

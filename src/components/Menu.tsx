@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-import { Home, Heart, Music } from 'lucide-react'; // Ícones bonitos
+import { House, Music, Heart } from 'lucide-react'; // Usando os ícones novos
 
 export function Menu() {
   return (
     <nav className="flex flex-col gap-4">
       <Link to="/" className="flex items-center gap-3 text-gray-700 hover:text-green-600 transition font-medium">
-        <Home size={20} />
+        <House size={20} />
         Início
       </Link>
       
