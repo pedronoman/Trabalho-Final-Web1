@@ -40,6 +40,8 @@ model Song {
   playlist_id Int
   playlist    Playlist @relation(fields: [playlist_id], references: [id], onDelete: Cascade)
 
+  isFavorite  Boolean  @default(false)
+
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 

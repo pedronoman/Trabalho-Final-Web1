@@ -1,68 +1,68 @@
-import { prisma } from "../repository/client.js"; // Verifica se o caminho do client.js está correto
+import { prisma } from "../repository/client.js";
 
 export class PlaylistController {
+  
+  // Buscar todas
+  async getAll(request, response) {
+    const playlists = await prisma.playlist.findMany({
+        include: { songs: true }
+    });
+    return response.json(playlists);
+  }
 
-    // GET ALL: Buscar todas as playlists e suas músicas
-    async getAll(request, response) {
-        const playlists = await prisma.playlist.findMany({
-            include: {
-                songs: true // Traz todas as músicas da playlist
-            }
-        })
-        return response.json(playlists)
+  // Buscar UMA (com músicas)
+  async getById(request, response) {
+    const { id } = request.params;
+    try {
+        const playlist = await prisma.playlist.findUnique({
+            where: { id: parseInt(id) },
+            include: { songs: true }
+        });
+        return response.json(playlist);
+    } catch (error) {
+        return response.status(400).json({ message: "Playlist não encontrada" });
     }
+  }
 
-    // CREATE: Criar nova playlist
-    async create(request, response) {
-        // O frontend envia { name: "Minha Playlist" }
-        const { name, description } = request.body
-
-        if (!name || name === "") {
-            return response.status(400).json({
-                message: "O nome da playlist é obrigatório."
-            })
-        }
-
-        try {
-            const playlist = await prisma.playlist.create({
-                data: {
-                    name,
-                    description: description || "" // Opcional
-                }
-            })
-            return response.status(201).json(playlist)
-        } catch (error) {
-            return response.status(400).json({ error: "Erro ao criar playlist" })
-        }
+  // Criar
+  async create(request, response) {
+    const { name } = request.body;
+    try {
+      const playlist = await prisma.playlist.create({
+        data: { name }
+      });
+      return response.status(201).json(playlist);
+    } catch (error) {
+      return response.status(400).json({ message: "Erro ao criar playlist" });
     }
+  }
 
-    // GET BY ID
-    async getById(request, response) {
-        try {
-            const { id } = request.params
-            const playlist = await prisma.playlist.findFirstOrThrow({
-                where: { id: parseInt(id) },
-                include: { songs: true }
-            })
-            return response.json(playlist)
+  // ATUALIZAR (Renomear)
+  async update(request, response) {
+    const { id } = request.params;
+    const { name } = request.body;
 
-        } catch(error) {
-            return response.status(404).json({ message: "Playlist não encontrada.", error })
-        }
+    try {
+      const playlist = await prisma.playlist.update({
+        where: { id: parseInt(id) },
+        data: { name }
+      });
+      return response.json(playlist);
+    } catch (error) {
+      return response.status(400).json({ message: "Erro ao atualizar" });
     }
+  }
 
-    // DELETE
-    async delete(request, response) {
-        const { id } = request.body // Ou request.params, depende da tua rota
-
-        try {
-            await prisma.playlist.delete({
-                where: { id: parseInt(id) }
-            })
-            return response.json({ message: "Playlist removida." })
-
-        } catch(error) {
-             return response.status(400).json({ message: "Erro ao remover.", error })           
-        }
+  // DELETAR
+  async delete(request, response) {
+    const { id } = request.params;
+    try {
+      await prisma.playlist.delete({
+        where: { id: parseInt(id) }
+      });
+      return response.json({ message: "Playlist removida" });
+    } catch (error) {
+      return response.status(400).json({ message: "Erro ao deletar" });
     }
+  }
 }

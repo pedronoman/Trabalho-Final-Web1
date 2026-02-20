@@ -19,4 +19,7 @@ songRouter.put(url, songController.update);
 // Delete
 songRouter.delete(url, songController.delete);
 
+// Adiciona esta linha junto das outras rotas de músicas:
+songRouter.patch('/api/songs/:id/favorite', songController.toggleFavorite);
+
 export { songRouter };

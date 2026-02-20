@@ -14,6 +14,7 @@ export interface Musica {
     cover?: string;
     album?: string;
     playlist_id: number;
+    isFavorite?: boolean; // <--- NOVA LINHA AQUI
 }
 
 export interface Playlist {

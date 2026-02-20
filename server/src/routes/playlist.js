@@ -1,25 +1,16 @@
-import { Router } from "express";
-// Importamos o controller novo
-import { PlaylistController } from "../controllers/PlaylistController.js";
+import { Router } from 'express';
+import { PlaylistController } from '../controllers/PlaylistController.js';
 
 const playlistRouter = Router();
 const playlistController = new PlaylistController();
 
-// --- Rotas de Playlists (Antigo Projects) ---
-
-// Get All
+// Rotas existentes
 playlistRouter.get('/api/playlists', playlistController.getAll);
-
-// Get By Id
-playlistRouter.get('/api/playlists/:id', playlistController.getById);
-
-// Create
 playlistRouter.post('/api/playlists', playlistController.create);
 
-// Delete
-playlistRouter.delete('/api/playlists', playlistController.delete);
-
-// (Opcional) Se implementaste o Update no controller, descomenta abaixo:
-// playlistRouter.put('/api/playlists', playlistController.update);
+// NOVAS ROTAS (Precisam do :id)
+playlistRouter.get('/api/playlists/:id', playlistController.getById); // Buscar uma só
+playlistRouter.put('/api/playlists/:id', playlistController.update);  // Renomear
+playlistRouter.delete('/api/playlists/:id', playlistController.delete); // Excluir
 
 export { playlistRouter };

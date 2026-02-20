@@ -89,4 +89,26 @@ export class SongController {
       response.status(400).json({ message: "Erro ao deletar.", error });
     }
   }
+  // FAVORITAR MÚSICA
+  async toggleFavorite(request, response) {
+    const { id } = request.params;
+
+    try {
+      // 1. Encontra a música atual
+      const song = await prisma.song.findUnique({
+        where: { id: parseInt(id) }
+      });
+
+      // 2. Atualiza invertendo o valor de isFavorite
+      const updatedSong = await prisma.song.update({
+        where: { id: parseInt(id) },
+        data: { isFavorite: !song.isFavorite }
+      });
+
+      return response.json(updatedSong);
+    } catch (error) {
+      console.error(error);
+      return response.status(400).json({ message: "Erro ao favoritar." });
+    }
+  }
 }
