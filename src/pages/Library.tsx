@@ -2,13 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { api, type Musica } from '../services/api'; 
 import { usePlayer } from '../contexts/PlayerContext'; 
 import { usePlaylist } from '../contexts/PlaylistContext'; 
-import { Play, Loader2, Heart } from 'lucide-react'; 
+// 1. Adicionamos o ícone Search (Lupa)
+import { Play, Loader2, Heart, Search } from 'lucide-react'; 
 
 export function Library() {
     const [musicas, setMusicas] = useState<Musica[]>([]);
     const { playlists } = usePlaylist(); 
     const [novaMusica, setNovaMusica] = useState({ title: '', artist: '', url: '', playlist_id: 0 });
     const [isCarregando, setIsCarregando] = useState(false);
+    
+    // 2. Novo estado para a barra de pesquisa
+    const [busca, setBusca] = useState('');
+
     const { playSong } = usePlayer(); 
 
     useEffect(() => { carregarMusicas(); }, []);
@@ -75,14 +80,19 @@ export function Library() {
         }
     }
 
+    // 3. Lógica de Filtragem (Procura no título OU no artista)
+    const musicasFiltradas = musicas.filter(musica => 
+        musica.title.toLowerCase().includes(busca.toLowerCase()) || 
+        (musica.artist && musica.artist.toLowerCase().includes(busca.toLowerCase()))
+    );
+
     return (
-        // Texto agora é branco na página principal
         <div className="p-10 container mx-auto mb-24 text-white"> 
             <h1 className="text-3xl font-bold mb-6 flex items-center gap-2">
                 Minha Biblioteca Musical 🎵
             </h1>
 
-            {/* FORMULÁRIO DARK */}
+            {/* FORMULÁRIO DE ADICIONAR */}
             <form onSubmit={adicionarMusica} className="mb-8 p-6 bg-zinc-900/50 border border-zinc-800/50 rounded-xl flex flex-wrap gap-3 shadow-sm">
                 <input 
                     placeholder="Nome da Música" 
@@ -130,9 +140,22 @@ export function Library() {
                 </button>
             </form>
 
-            {/* LISTA DE MÚSICAS DARK */}
+            {/* BARRA DE PESQUISA (NOVIDADE) */}
+            <div className="mb-8 relative">
+                <Search size={20} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-zinc-400" />
+                <input 
+                    type="text"
+                    placeholder="O que queres ouvir? Procura por músicas ou artistas..."
+                    className="w-full p-4 pl-12 bg-zinc-900 border border-zinc-800 rounded-full text-white focus:outline-none focus:border-zinc-600 focus:bg-zinc-800 transition-colors placeholder-zinc-500"
+                    value={busca}
+                    onChange={(e) => setBusca(e.target.value)}
+                />
+            </div>
+
+            {/* LISTA DE MÚSICAS */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {musicas.map(musica => (
+                {/* Agora mapeamos 'musicasFiltradas' em vez de 'musicas' */}
+                {musicasFiltradas.map(musica => (
                     <div key={musica.id} className="group bg-zinc-900/40 border border-zinc-800/50 hover:bg-zinc-800 p-4 rounded-xl shadow-sm transition-colors flex items-center gap-4 cursor-pointer">
                         <div className="w-16 h-16 bg-zinc-800 rounded-md flex items-center justify-center text-zinc-500 font-bold text-xl shadow-inner">
                             {musica.cover ? <img src={musica.cover} className="w-full h-full object-cover rounded-md"/> : '♪'}
@@ -154,7 +177,8 @@ export function Library() {
                         </button>
 
                         <button 
-                            onClick={() => playSong(musica, musicas)} 
+                            // O Player precisa receber a lista filtrada para o auto-play tocar as músicas certas na ordem!
+                            onClick={() => playSong(musica, musicasFiltradas)} 
                             className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-black shadow-lg hover:bg-green-400 hover:scale-105 transition-all opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0"
                             title="Tocar agora"
                         >
@@ -164,9 +188,17 @@ export function Library() {
                 ))}
             </div>
 
+            {/* MENSAGEM SE A PESQUISA NÃO ENCONTRAR NADA */}
+            {musicas.length > 0 && musicasFiltradas.length === 0 && (
+                <div className="text-center py-20">
+                    <p className="text-zinc-500 text-lg">Nenhuma música encontrada para "{busca}".</p>
+                </div>
+            )}
+
+            {/* MENSAGEM SE A BIBLIOTECA ESTIVER VAZIA */}
             {musicas.length === 0 && (
                 <div className="text-center py-20">
-                    <p className="text-zinc-500 text-lg">Sua biblioteca está vazia.</p>
+                    <p className="text-zinc-500 text-lg">A tua biblioteca está vazia.</p>
                 </div>
             )}
         </div>
