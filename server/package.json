@@ -1,13 +1,13 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "Project Control Server",
+  "description": "Web Music Player API",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./src/server.js"
   },
-  "author": "Fernando B Oliveira <fboliveira@ufop.edu.br>",
+  "author": "Pedro Barreto Noman de Paula",
   "license": "MIT",
   "type": "module",
   "dependencies": {
