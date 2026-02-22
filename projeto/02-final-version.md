@@ -43,8 +43,9 @@ O projeto foi dividido em duas frentes, utilizando tecnologias modernas e seguin
 
 *Abaixo estão as capturas de tela demonstrando a interface final e responsiva da aplicação*
 
- `![Tela Inicial da Biblioteca](./Screenshot 2026-02-22 200250.png)`
- 
- `![Tela da Playlist](./Screenshot 2026-02-22 200127.png)`
+ <img width="1875" height="985" alt="image" src="https://github.com/user-attachments/assets/8a3d1ce3-c035-400a-aa0b-1c5512159722" />
+
+ <img width="1864" height="1031" alt="image" src="https://github.com/user-attachments/assets/2ee6a3d2-1c91-4103-8d9c-de075573dfd4" />
+
 
 ---
