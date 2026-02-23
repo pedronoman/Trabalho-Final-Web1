@@ -49,3 +49,32 @@ O projeto foi dividido em duas frentes, utilizando tecnologias modernas e seguin
 
 
 ---
+
+## ⚙️ Passo a passo para rodar o projeto:
+
+### Rodar o Back-end (API e Banco de Dados)
+
+O back-end utiliza Node.js, Express e o banco de dados SQLite (já configurado via Prisma).
+
+* Entre na pasta do servidor:
+
+* Instale as dependências necessárias:
+
+* Inicie o servidor:
+
+O servidor estará na porta 5000 (http://localhost:5000).
+
+### Rodar o Front-end (React + Vite)
+
+* Abra um novo terminal (mantenha o terminal do back-end a rodar) e certifique-se de que está na raiz do projeto (fora da pasta server).
+
+* Instale as dependências do front-end:
+
+* Inicie o servidor de desenvolvimento do Vite:
+
+A aplicação será aberta no seu navegador, geralmente no endereço http://localhost:5173.
+
+### 🧪 Dica para Testes
+Para testar a adição de músicas, utilize links diretos de ficheiros .mp3. Exemplo de link válido (Domínio Público):
+
+https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3
